@@ -6,7 +6,7 @@ import scenes
 
 def main():
     pyglet.font.add_directory('.')
-    director.init(width=1366, height=768, do_not_scale=True, caption = "Art's 2D Game")
+    director.init(width=1366, height=768, do_not_scale=True, caption = "LocoPong")
     director.show_FPS = True
     my_scene = scenes.MyGame()
 
