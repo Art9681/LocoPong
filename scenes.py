@@ -1,1 +1,26 @@
-__author__ = 'Art'
+import pyglet
+import cocos
+import levels
+import interface
+
+
+class MyGame(cocos.scene.Scene):
+    def __init__(self):
+        super(MyGame, self).__init__()
+
+
+        #Create the clock and delta time variables.
+        #The clock ticks 60 times a second.
+        self.clock = pyglet.clock
+        dt = 1/60
+
+        #The layers this scene has.
+        self.interface = interface.Interface()
+        self.levelMain = levels.Level(self.clock)
+
+        #Add the layers to the scene.
+        self.add(self.interface, z=1)
+        self.add(self.levelMain, z=0)
+
+
+        self.clock.schedule(self.levelMain.update)
