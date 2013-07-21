@@ -8,13 +8,16 @@ class Ball(object):
     def __init__(self):
         super(Ball, self).__init__()
 
-        self.mass = 1
+        self.image = cocos.sprite.Sprite('Content/ball.png')
+
+        self.mass = 0.5
         self.radius = 25
         self.moment = pymunk.moment_for_circle(self.mass, 0,self.radius, (0, 0))
         self.body = pymunk.Body(self.mass, self.moment)
-        self.body.position = 100,100
+        self.body.position = 500,500
         self.shape = pymunk.Circle(self.body, self.radius, (0, 0))
-        self.shape.elasticity = 0.95
+        self.shape.elasticity = 0.9
+        self.shape.friction = 0.1
 
     def draw(self):
         glBegin(GL_LINE_LOOP)
@@ -26,7 +29,7 @@ class Ball(object):
         glEnd()
 
     def update(self):
-        pass
+        self.image.position = self.body.position
 
 
 

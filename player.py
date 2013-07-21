@@ -16,16 +16,19 @@ class Player(object):
         self.elasticity = 0
         self.moment = pymunk.moment_for_poly(self.mass, self.verts)
         self.body = pymunk.Body(self.mass, self.moment)
-        self.body.position = 20, 55
+        self.body.position = 55, 55
         self.shape = pymunk.Poly(self.body, self.verts)
         #self.shape.group = 1
         #self.shape.layers = 1
         #self.shape.collision_type = 1
         self.shape.friction = 0.1
+        self.shape.elasticity = 0.9
+        self.pin_body = pymunk.Body()
+        self.pin_body.position = self.body.position
+        self.spring = pymunk.DampedRotarySpring(self.body, self.pin_body, 0, 2000000, 900000)
 
     def draw(self):
         points = self.shape.get_points()
-        #points = [points[0]] + points + [points[0], points[0]]
         boxVerts = []
         for p in points:
             boxVerts.append(p.x)
@@ -34,9 +37,9 @@ class Player(object):
 
     def update(self):
         #Restrict movement to Y axis and do not allow rotation.
-        self.body.velocity.x = 0
-        if self.body.angle != 0.0:
-            self.body.angle = 0.0
+        self.body.position.x = 55
+        '''if self.body.angle != 0.0:
+            self.body.angle = 0.0'''
 
 
 

@@ -30,15 +30,17 @@ class Level(cocos.layer.Layer):
         self.boundary_bottom = pymunk.Segment(self.space.static_body, (0, 0), (1370, 0), 1)
         self.boundary_left = pymunk.Segment(self.space.static_body, (0, 0), (0, 770), 1)
         self.boundary_right = pymunk.Segment(self.space.static_body, (1370, 0), (1370, 770), 1)
-        self.boundary_top.friction = 10
-        self.boundary_bottom.friction = 10
-        self.boundary_left.friction = 10
-        self.boundary_right.friction = 10
+        self.boundary_top.friction = self.boundary_bottom.friction = self.boundary_left.friction = self.boundary_right.friction = 10
+        self.boundary_top.elasticity = self.boundary_bottom.elasticity = self.boundary_left.elasticity = self.boundary_right.elasticity = 0.9
 
         #Create actors and other physics objects.
         self.ball = ball.Ball()
         self.player = player.Player()
 
+        #BatchNode to render all sprites.
+        self.batch = cocos.batch.BatchNode()
+        self.batch.add(self.ball.image)
+        self.add(self.batch)
 
 
         #Add physics objects to our space.
@@ -50,19 +52,28 @@ class Level(cocos.layer.Layer):
                         self.ball.body,
                         self.ball.shape,
                         self.player.body,
-                        self.player.shape)
+                        self.player.shape,
+                        self.player.spring,
+                        )
 
 
     def update(self, dt):
         self.space.step(dt)
         self.player.update()
+        self.ball.update()
 
     #Detects key presses and releases and fires events accordingly.
     def on_key_press(self, symbol, modifiers):
+        if symbol == key.SPACE:
+            self.ball.body.apply_impulse(pymunk.Vec2d(-400, 0), (0, 0))
         if symbol == key.W:
             self.player.body.velocity.y = 800
         if symbol == key.S:
             self.player.body.velocity.y = -800
+        if symbol == key.D:
+            self.player.body.apply_impulse(pymunk.Vec2d(30000, 0), (0, 45))
+        if symbol == key.A:
+            self.player.body.apply_impulse(pymunk.Vec2d(-30000, 0), (0, 45))
 
     def on_key_release(self, symbol, modifiers):
         if symbol == key.W:
