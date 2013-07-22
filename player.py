@@ -23,24 +23,11 @@ class Player(object):
         #self.shape.collision_type = 1
         self.shape.friction = 0.1
         self.shape.elasticity = 0.9
+        self.shape.collision_type = 2
         self.pin_body = pymunk.Body()
         self.pin_body.position = self.body.position
         self.spring = pymunk.DampedRotarySpring(self.body, self.pin_body, 0, 20000000, 900000)
 
-    def draw(self):
-        points = self.shape.get_points()
-        boxVerts = []
-        for p in points:
-            boxVerts.append(p.x)
-            boxVerts.append(p.y)
-        pyglet.graphics.draw(len(points), GL_QUADS, ('v2f', boxVerts))
-
     def update(self, xpos):
         #Restrict movement to Y axis and do not allow rotation.
         self.body.position.x = xpos
-        '''if self.body.angle != 0.0:
-            self.body.angle = 0.0'''
-
-
-
-

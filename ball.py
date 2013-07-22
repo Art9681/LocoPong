@@ -1,14 +1,8 @@
-import math
-import pyglet
-from pyglet.gl import *
 import pymunk
-import cocos
 
 class Ball(object):
     def __init__(self):
         super(Ball, self).__init__()
-
-        self.image = cocos.sprite.Sprite('Content/ball.png')
 
         self.mass = 0.5
         self.radius = 25
@@ -17,11 +11,6 @@ class Ball(object):
         self.body.position = 500,500
         self.shape = pymunk.Circle(self.body, self.radius, (0, 0))
         self.shape.elasticity = 0.9
-        self.shape.friction = 0.9
-
-    def update(self):
-        self.image.position = self.body.position
-
-
-
-
+        self.shape.friction = 0.1
+        self.shape.collision_type = 1
+        self.body.velocity_limit = 1500

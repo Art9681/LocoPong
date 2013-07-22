@@ -4,11 +4,13 @@ from cocos import layer
 from cocos.particle import *
 from cocos.particle_systems import *
 import pymunk
+import pymunk.pyglet_util
 import interface
 import ball
 import player
 
 class Background(cocos.layer.Layer):
+    is_event_handler = True
     def __init__(self):
         super( Background, self ).__init__()
 
@@ -54,7 +56,6 @@ class Level(cocos.layer.Layer):
 
         #BatchNode to render all sprites.
         self.batch = cocos.batch.BatchNode()
-        self.batch.add(self.ball.image)
         self.add(self.batch)
 
 
@@ -74,16 +75,26 @@ class Level(cocos.layer.Layer):
                         self.ai.spring,
                         )
 
+        #The collision handler. When the objects with the defined collision types collide,
+        #The handler fires the methods defined here.
+        #Collision types are as follows:
+        #Ball = 1
+        #Paddles = 2
+        self.space.add_collision_handler(1, 2, begin = None, pre_solve = None, post_solve = self.ball_hit)
+
+    def ball_hit(self, space, arbiter):
+        print "Ball Hit!"
+        self.player.body.reset_forces()
+        #self.ball.body.velocity = (100, 100)
+
 
     def update(self, dt):
         self.space.step(dt)
         self.player.update(xpos = 55)
         self.ai.update(xpos = 1296)
-        self.ball.update()
 
     def draw(self):
-        self.player.draw()
-        self.ai.draw()
+        pymunk.pyglet_util.draw(self.space)
 
     #Detects key presses and releases and fires events accordingly.
     def on_key_press(self, symbol, modifiers):
