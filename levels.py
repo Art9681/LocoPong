@@ -51,8 +51,8 @@ class Level(cocos.layer.Layer):
 
         #Create actors and other physics objects.
         self.ball = ball.Ball()
-        self.player = player.Player(position = (55, 55))
-        self.ai = player.Player(position = (500, 55))
+        self.player = player.Player(position = (55, 768 / 2))
+
 
         #BatchNode to render all sprites.
         self.batch = cocos.batch.BatchNode()
@@ -70,9 +70,7 @@ class Level(cocos.layer.Layer):
                         self.player.body,
                         self.player.shape,
                         self.player.spring,
-                        self.ai.body,
-                        self.ai.shape,
-                        self.ai.spring,
+                        self.player.groove,
                         )
 
         #The collision handler. When the objects with the defined collision types collide,
@@ -84,14 +82,13 @@ class Level(cocos.layer.Layer):
 
     def ball_hit(self, space, arbiter):
         print "Ball Hit!"
-        self.player.body.reset_forces()
-        #self.ball.body.velocity = (100, 100)
+
 
 
     def update(self, dt):
         self.space.step(dt)
         self.player.update(xpos = 55)
-        self.ai.update(xpos = 1296)
+
 
     def draw(self):
         pymunk.pyglet_util.draw(self.space)
@@ -102,22 +99,26 @@ class Level(cocos.layer.Layer):
             self.ball.body.apply_impulse(pymunk.Vec2d(-400, 0), (0, 0))
         if symbol == key.W:
             self.player.body.velocity.y = 800
-            self.ai.body.velocity.y = 800
+
         if symbol == key.S:
             self.player.body.velocity.y = -800
-            self.ai.body.velocity.y = -800
+
         if symbol == key.D:
             self.player.body.apply_impulse(pymunk.Vec2d(30000, 0), (0, 45))
         if symbol == key.A:
-            self.player.body.apply_impulse(pymunk.Vec2d(-30000, 0), (0, 45))
+            self.player.body.apply_impulse(pymunk.Vec2d(30000, 0), (0, -45))
 
     def on_key_release(self, symbol, modifiers):
         if symbol == key.W:
             self.player.body.velocity.y = 0
-            self.ai.body.velocity.y = 0
+
         if symbol == key.S:
             self.player.body.velocity.y = 0
-            self.ai.body.velocity.y = 0
+
+        if symbol == key.D:
+            pass
+        if symbol == key.A:
+            pass
     def on_mouse_press(self, x, y, button, modifiers):
         if button == mouse.LEFT:
             print "Hey Guys"
