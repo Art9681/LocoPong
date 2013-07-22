@@ -12,7 +12,7 @@ class MyGame(cocos.scene.Scene):
         #Create the clock and delta time variables.
         #The clock ticks 60 times a second.
         self.clock = pyglet.clock
-        dt = 1/60
+        #dt = 1/60
 
         #The layers this scene has.
         self.bg = levels.Background()

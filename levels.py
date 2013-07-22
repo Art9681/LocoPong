@@ -13,18 +13,18 @@ class Background(cocos.layer.Layer):
         super( Background, self ).__init__()
 
         self.bg = cocos.sprite.Sprite('Content/bg.png', position = (1366 / 2, 768 / 2))
-        #self.add(self.bg)
+        self.add(self.bg)
         #self.twirl = cocos.actions.grid3d_actions.Twirl( center=(1366 / 2, 768 / 2), grid=(16,12), duration=15, twirls=6, amplitude=6 )
         #self.waves3d = cocos.actions.grid3d_actions.Waves3D( waves=18, amplitude=80, grid=(32,24), duration=15)
         #self.shakyt = cocos.actions.tiledgrid_actions.ShakyTiles3D( grid=(16,12), duration=60)
         #self.shatter = cocos.actions.tiledgrid_actions.ShatteredTiles3D( randrange=16, grid=(16,12), duration=60 )
-        #self.wavestiles = cocos.actions.tiledgrid_actions.WavesTiles3D( waves=300, amplitude=20, duration=1280, grid=(16,12) )
-        self.ripple = cocos.actions.grid3d_actions.Ripple3D( grid=(32,32), waves=300, duration=1280, amplitude=100, radius=640)
-        #self.do(self.ripple)
+        self.wavestiles = cocos.actions.tiledgrid_actions.WavesTiles3D( waves=300, amplitude=20, duration=1280, grid=(16,12) )
+        #self.ripple = cocos.actions.grid3d_actions.Ripple3D( grid=(32,32), waves=300, duration=1280, amplitude=100, radius=640)
+        self.do(self.wavestiles)
 
-        self.particles = Spiral()
-        self.particles.position = (1366 / 2, 768 / 2)
-        self.add(self.particles)
+        #self.particles = Spiral()
+        #self.particles.position = (1366 / 2, 768 / 2)
+        #self.add(self.ripple)
 
 
 class Level(cocos.layer.Layer):
@@ -37,12 +37,6 @@ class Level(cocos.layer.Layer):
 
         #Create the pymunk space that will simulate the physics.
         self.space = pymunk.Space()
-
-        '''Used to reduce oscillating contacts and keep the collision
-        cache warm. Defaults to 0.1. If you have poor simulation quality,
-        increase this number as much as possible without allowing visible
-        amounts of overlap.'''
-        self.space.collision_slop = 0.3
         self.space.gravity = (0, 0)
 
         #The map boundaries.
