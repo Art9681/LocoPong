@@ -17,16 +17,7 @@ class Ball(object):
         self.body.position = 500,500
         self.shape = pymunk.Circle(self.body, self.radius, (0, 0))
         self.shape.elasticity = 0.9
-        self.shape.friction = 0.1
-
-    def draw(self):
-        glBegin(GL_LINE_LOOP)
-        for i in range(360):
-            angle = 2 * math.pi * i / 360
-            x = math.cos(angle)
-            y = math.sin(angle)
-            glVertex2d(x, y)
-        glEnd()
+        self.shape.friction = 0.9
 
     def update(self):
         self.image.position = self.body.position

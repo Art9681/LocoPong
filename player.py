@@ -5,7 +5,7 @@ import pymunk
 import cocos
 
 class Player(object):
-    def __init__(self):
+    def __init__(self, position):
         super(Player, self).__init__()
         self.v1 = 50
         self.v2 = 15
@@ -16,7 +16,7 @@ class Player(object):
         self.elasticity = 0
         self.moment = pymunk.moment_for_poly(self.mass, self.verts)
         self.body = pymunk.Body(self.mass, self.moment)
-        self.body.position = 55, 55
+        self.body.position = position
         self.shape = pymunk.Poly(self.body, self.verts)
         #self.shape.group = 1
         #self.shape.layers = 1
@@ -25,7 +25,7 @@ class Player(object):
         self.shape.elasticity = 0.9
         self.pin_body = pymunk.Body()
         self.pin_body.position = self.body.position
-        self.spring = pymunk.DampedRotarySpring(self.body, self.pin_body, 0, 2000000, 900000)
+        self.spring = pymunk.DampedRotarySpring(self.body, self.pin_body, 0, 20000000, 900000)
 
     def draw(self):
         points = self.shape.get_points()
@@ -35,9 +35,9 @@ class Player(object):
             boxVerts.append(p.y)
         pyglet.graphics.draw(len(points), GL_QUADS, ('v2f', boxVerts))
 
-    def update(self):
+    def update(self, xpos):
         #Restrict movement to Y axis and do not allow rotation.
-        self.body.position.x = 55
+        self.body.position.x = xpos
         '''if self.body.angle != 0.0:
             self.body.angle = 0.0'''
 

@@ -15,12 +15,16 @@ class MyGame(cocos.scene.Scene):
         dt = 1/60
 
         #The layers this scene has.
-        self.interface = interface.Interface()
+        self.bg = levels.Background()
         self.levelMain = levels.Level(self.clock)
+        self.interface = interface.Interface()
+
 
         #Add the layers to the scene.
-        self.add(self.interface, z=1)
-        self.add(self.levelMain, z=0)
+        self.add(self.bg, z=0)
+        self.add(self.levelMain, z=1)
+        self.add(self.interface, z=2)
+
 
 
         self.clock.schedule(self.levelMain.update)

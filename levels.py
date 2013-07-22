@@ -6,6 +6,22 @@ import interface
 import ball
 import player
 
+class Background(cocos.layer.Layer):
+    def __init__(self):
+        super( Background, self ).__init__()
+
+        self.bg = cocos.sprite.Sprite('Content/bg.png', position = (1366 / 2, 768 / 2))
+        self.add(self.bg)
+        #self.twirl = cocos.actions.grid3d_actions.Twirl( center=(1366 / 2, 768 / 2), grid=(16,12), duration=15, twirls=6, amplitude=6 )
+        #self.waves3d = cocos.actions.grid3d_actions.Waves3D( waves=18, amplitude=80, grid=(32,24), duration=15)
+        #self.shakyt = cocos.actions.tiledgrid_actions.ShakyTiles3D( grid=(16,12), duration=60)
+        #self.shatter = cocos.actions.tiledgrid_actions.ShatteredTiles3D( randrange=16, grid=(16,12), duration=60 )
+        #self.wavestiles = cocos.actions.tiledgrid_actions.WavesTiles3D( waves=300, amplitude=20, duration=1280, grid=(16,12) )
+        self.ripple = cocos.actions.grid3d_actions.Ripple3D( grid=(32,32), waves=300, duration=1280, amplitude=100, radius=640)
+        self.do(self.ripple)
+
+        #self.particles = cocos.particle.particle_systems.Spiral()
+        #self.add(self.particles)
 
 class Level(cocos.layer.Layer):
     is_event_handler = True
@@ -30,12 +46,13 @@ class Level(cocos.layer.Layer):
         self.boundary_bottom = pymunk.Segment(self.space.static_body, (0, 0), (1370, 0), 1)
         self.boundary_left = pymunk.Segment(self.space.static_body, (0, 0), (0, 770), 1)
         self.boundary_right = pymunk.Segment(self.space.static_body, (1370, 0), (1370, 770), 1)
-        self.boundary_top.friction = self.boundary_bottom.friction = self.boundary_left.friction = self.boundary_right.friction = 10
+        self.boundary_top.friction = self.boundary_bottom.friction = self.boundary_left.friction = self.boundary_right.friction = 0
         self.boundary_top.elasticity = self.boundary_bottom.elasticity = self.boundary_left.elasticity = self.boundary_right.elasticity = 0.9
 
         #Create actors and other physics objects.
         self.ball = ball.Ball()
-        self.player = player.Player()
+        self.player = player.Player(position = (55, 55))
+        self.ai = player.Player(position = (500, 55))
 
         #BatchNode to render all sprites.
         self.batch = cocos.batch.BatchNode()
@@ -54,13 +71,21 @@ class Level(cocos.layer.Layer):
                         self.player.body,
                         self.player.shape,
                         self.player.spring,
+                        self.ai.body,
+                        self.ai.shape,
+                        self.ai.spring,
                         )
 
 
     def update(self, dt):
         self.space.step(dt)
-        self.player.update()
+        self.player.update(xpos = 55)
+        self.ai.update(xpos = 1296)
         self.ball.update()
+
+    def draw(self):
+        self.player.draw()
+        self.ai.draw()
 
     #Detects key presses and releases and fires events accordingly.
     def on_key_press(self, symbol, modifiers):
@@ -68,8 +93,10 @@ class Level(cocos.layer.Layer):
             self.ball.body.apply_impulse(pymunk.Vec2d(-400, 0), (0, 0))
         if symbol == key.W:
             self.player.body.velocity.y = 800
+            self.ai.body.velocity.y = 800
         if symbol == key.S:
             self.player.body.velocity.y = -800
+            self.ai.body.velocity.y = -800
         if symbol == key.D:
             self.player.body.apply_impulse(pymunk.Vec2d(30000, 0), (0, 45))
         if symbol == key.A:
@@ -78,16 +105,15 @@ class Level(cocos.layer.Layer):
     def on_key_release(self, symbol, modifiers):
         if symbol == key.W:
             self.player.body.velocity.y = 0
+            self.ai.body.velocity.y = 0
         if symbol == key.S:
             self.player.body.velocity.y = 0
-
+            self.ai.body.velocity.y = 0
     def on_mouse_press(self, x, y, button, modifiers):
         if button == mouse.LEFT:
             print "Hey Guys"
 
-    def draw(self):
-        self.player.draw()
-        self.ball.draw()
+
 
 #Handles the scrolling manager. Physics layers get added to this and this class gets added to the scene.
 class GameLayer(object):
