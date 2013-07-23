@@ -9,24 +9,37 @@ import interface
 import ball
 import player
 
+
 class Background(cocos.layer.Layer):
     is_event_handler = True
     def __init__(self):
         super( Background, self ).__init__()
-
+        '''This class is loaded as an instance in the main layer class so it can be manipulated by events.
+        The instance itself is what is added to the scene.'''
         self.bg = cocos.sprite.Sprite('Content/bg.png', position = (1366 / 2, 768 / 2))
         self.add(self.bg)
         #self.twirl = cocos.actions.grid3d_actions.Twirl( center=(1366 / 2, 768 / 2), grid=(16,12), duration=15, twirls=6, amplitude=6 )
         #self.waves3d = cocos.actions.grid3d_actions.Waves3D( waves=18, amplitude=80, grid=(32,24), duration=15)
         #self.shakyt = cocos.actions.tiledgrid_actions.ShakyTiles3D( grid=(16,12), duration=60)
         #self.shatter = cocos.actions.tiledgrid_actions.ShatteredTiles3D( randrange=16, grid=(16,12), duration=60 )
-        self.wavestiles = cocos.actions.tiledgrid_actions.WavesTiles3D( waves=300, amplitude=20, duration=1280, grid=(16,12) )
-        #self.ripple = cocos.actions.grid3d_actions.Ripple3D( grid=(32,32), waves=300, duration=1280, amplitude=100, radius=640)
+        self.wavestiles = cocos.actions.tiledgrid_actions.WavesTiles3D( waves=300, amplitude=20, duration=1280, grid=(38,38) )
+        self.ripple = cocos.actions.grid3d_actions.Ripple3D( grid=(32,32), waves=300, duration=1280, amplitude=100, radius=640)
         self.do(self.wavestiles)
 
-        #self.particles = Spiral()
-        #self.particles.position = (1366 / 2, 768 / 2)
-        #self.add(self.ripple)
+    #This function is ran when the ball strikes the paddle. The main layer calls this.
+    def state_change(self):
+        print "state change!"
+        self.actions.pop()
+        self.do(self.ripple)
+
+
+class ParticleLayer(cocos.layer.Layer):
+    is_event_handler = True
+    def __init__(self):
+        super( ParticleLayer, self ).__init__()
+
+        self.particles = Spiral()
+        self.particles.position = (1366 / 2, 768 / 2)
 
 
 class Level(cocos.layer.Layer):
@@ -40,6 +53,7 @@ class Level(cocos.layer.Layer):
         #Create the pymunk space that will simulate the physics.
         self.space = pymunk.Space()
         self.space.gravity = (0, 0)
+        self.bg = Background()
 
         #The map boundaries.
         self.boundary_top = pymunk.Segment(self.space.static_body, (0, 770), (1370, 770), 1)
@@ -82,6 +96,7 @@ class Level(cocos.layer.Layer):
 
     def ball_hit(self, space, arbiter):
         print "Ball Hit!"
+        Background.state_change(self.bg)
 
 
 
@@ -141,3 +156,4 @@ class GameLayer(object):
 
     def update(self, dt):
         self.level1.update(dt)
+

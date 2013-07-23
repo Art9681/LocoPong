@@ -29,7 +29,7 @@ class Player(object):
         self.spring = pymunk.DampedRotarySpring(self.body, self.pin_body, 0, 20000000, 900000)
 
         self.groove_body = pymunk.Body()
-        self.groove_body.position = (55, 0)
+        self.groove_body.position = (self.body.position.x, 0)
         self.groove = pymunk.GrooveJoint(self.groove_body, self.body, (0, 0), (0, 768), (0,0))
 
     def update(self, xpos):

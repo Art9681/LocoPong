@@ -4,7 +4,7 @@ class Ball(object):
     def __init__(self):
         super(Ball, self).__init__()
 
-        self.mass = 0.5
+        self.mass = 0.3
         self.radius = 25
         self.moment = pymunk.moment_for_circle(self.mass, 0,self.radius, (0, 0))
         self.body = pymunk.Body(self.mass, self.moment)
