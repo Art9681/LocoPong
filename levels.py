@@ -40,6 +40,7 @@ class ParticleLayer(cocos.layer.Layer):
 
         self.particles = Spiral()
         self.particles.position = (1366 / 2, 768 / 2)
+        self.add(self.particles)
 
 
 class Level(cocos.layer.Layer):
