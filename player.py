@@ -33,6 +33,4 @@ class Player(object):
         self.groove = pymunk.GrooveJoint(self.groove_body, self.body, (0, 0), (0, 768), (0,0))
 
     def update(self, xpos):
-        #Restrict movement to Y axis and do not allow rotation.
-        #self.body.position.x = xpos
         pass
