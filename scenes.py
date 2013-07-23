@@ -23,7 +23,7 @@ class MyGame(cocos.scene.Scene):
 
         #Add the layers to the scene.
         self.add(self.bg, z=0)
-        self.add(self.particle_layer, z=1)
+        #self.add(self.particle_layer, z=1)
         self.add(self.levelMain, z=2)
         self.add(self.interface, z=3)
 

@@ -38,7 +38,7 @@ class ParticleLayer(cocos.layer.Layer):
     def __init__(self):
         super( ParticleLayer, self ).__init__()
 
-        self.particles = Spiral()
+        self.particles = Sun()
         self.particles.position = (1366 / 2, 768 / 2)
         self.add(self.particles)
 
@@ -97,7 +97,7 @@ class Level(cocos.layer.Layer):
 
     def ball_hit(self, space, arbiter):
         print "Ball Hit!"
-        Background.state_change(self.bg)
+        #Background.state_change(self.bg)
 
 
 
